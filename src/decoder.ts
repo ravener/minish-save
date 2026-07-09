@@ -380,8 +380,10 @@ function decodeSaveFile(buf: Uint8Array, base: number): SaveSlot | null {
 // ---------------------------------------------------------------------------
 
 function decodeSaveHeader(buf: Uint8Array, base: number): SaveHeader | null {
-  if (buf[base + SH.initialized] === 0) return null;
-
+  // Note: we intentionally do NOT gate on SH.initialized here.
+  // The game writes a valid checksum for the header region but leaves the
+  // initialized byte at 0, so checking it would always produce null.
+  // Callers can inspect SaveHeader.initialized themselves if they need it.
   const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
   return {
     signature:  view.getInt32(base + SH.signature, true),

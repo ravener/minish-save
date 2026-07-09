@@ -826,7 +826,13 @@ export interface SaveHeader {
   /** Player name from the last-active slot. */
   name: string;
 
-  /** Whether the header has been written at least once. */
+  /**
+   * Whether the header's `initialized` byte is non-zero.
+   *
+   * Note: the game writes a valid checksum for the header region but does not
+   * reliably set this byte to 1, so it is often `false` even on a live save.
+   * `decodeSave()` parses the header regardless of this value.
+   */
   initialized: boolean;
 }
 
