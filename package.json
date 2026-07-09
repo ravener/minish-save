@@ -1,0 +1,23 @@
+{
+  "name": "minish-save",
+  "version": "1.0.0",
+  "description": "Read and write save files for The Legend of Zelda: The Minish Cap (GBA)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "keywords": ["zelda", "minish-cap", "gba", "save", "eeprom"],
+  "license": "MIT"
+}
