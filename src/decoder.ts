@@ -18,6 +18,7 @@ import {
   REGION_SAVE_1,
   REGION_SAVE_2,
   REGION_HEADER,
+  REGION_SIG,
   SF,
   PRS,
   STATS,
@@ -397,6 +398,25 @@ function decodeSaveHeader(buf: Uint8Array, base: number): SaveHeader | null {
 }
 
 // ---------------------------------------------------------------------------
+// Signature reader
+// ---------------------------------------------------------------------------
+
+/**
+ * Read the ROM signature string from EEPROM region 4 (address2 = 0x1000).
+ * Returns null when the region is blank (all zeros or empty).
+ */
+function decodeSignature(buf: Uint8Array): string | null {
+  const region = EEPROM_REGIONS[REGION_SIG];
+  let sig = "";
+  for (let i = 0; i < region.size; i++) {
+    const code = buf[region.address2 + i];
+    if (code === 0) break;
+    sig += String.fromCharCode(code);
+  }
+  return sig.length > 0 ? sig : null;
+}
+
+// ---------------------------------------------------------------------------
 // Public entry point
 // ---------------------------------------------------------------------------
 
@@ -451,6 +471,7 @@ export function decodeSave(
       readSlot(REGION_SAVE_2),
     ],
     header: readHeader(),
+    signature: decodeSignature(buf),
   };
 }
 

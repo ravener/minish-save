@@ -397,13 +397,12 @@ function deriveHeader(
 // Write the ROM signature to region 4
 // ---------------------------------------------------------------------------
 
-function writeSignature(eeprom: Uint8Array): void {
-  const sig = SIGNATURE_USA;
+function writeSignature(eeprom: Uint8Array, signature: string): void {
   const region = EEPROM_REGIONS[REGION_SIG];
-  // The game only uses address2 for the signature check
-  for (let i = 0; i < region.size && i < sig.length; i++) {
-    eeprom[region.address2 + i] = sig.charCodeAt(i);
-    eeprom[region.address1 + i] = sig.charCodeAt(i); // also write primary
+  for (let i = 0; i < region.size; i++) {
+    const code = i < signature.length ? signature.charCodeAt(i) & 0xFF : 0;
+    eeprom[region.address2 + i] = code;
+    eeprom[region.address1 + i] = code;
   }
 }
 
@@ -418,8 +417,9 @@ function writeSignature(eeprom: Uint8Array): void {
  *   backup EEPROM locations with matching checksums.
  * - Null slots are stamped with a TINI (factory-fresh) status so the game
  *   treats them as empty rather than corrupt.
- * - The ROM signature is written to region 4 so the game does not reinitialise
- *   the EEPROM on first boot.
+ * - The ROM signature is written to region 4.  The value from `save.signature`
+ *   is used verbatim when present; otherwise `SIGNATURE_USA` is used as a
+ *   fallback.  This keeps JPN saves (ZELDA 3) compatible on round-trip.
  * - If `save.header` is null a header is automatically derived from the slots.
  *
  * @param save    The DecodedSave returned by `decodeSave()` (possibly modified).
@@ -441,7 +441,7 @@ export function encodeSave(
   const view   = new DataView(eeprom.buffer);
 
   // ── ROM signature ────────────────────────────────────────────────────────
-  writeSignature(eeprom);
+  writeSignature(eeprom, save.signature ?? SIGNATURE_USA);
 
   // ── Save slots 0–2 ───────────────────────────────────────────────────────
   const regionIndices = [REGION_SAVE_0, REGION_SAVE_1, REGION_SAVE_2] as const;

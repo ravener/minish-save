@@ -856,6 +856,18 @@ export interface DecodedSave {
    * Null when the header region is missing or corrupt.
    */
   header: SaveHeader | null;
+
+  /**
+   * ROM region signature string stored in EEPROM region 4.
+   *
+   * Known values:
+   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 5"` — USA / EUR
+   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 3"` — JPN
+   *
+   * Preserved verbatim on round-trip so regional saves remain valid.
+   * `encodeSave()` falls back to the USA string when this is null.
+   */
+  signature: string | null;
 }
 
 // ---------------------------------------------------------------------------

@@ -126,4 +126,10 @@ export {
 
   /** SaveHeader field byte offsets. */
   SH,
+
+  /** ROM signature for USA / EUR builds ("AGBZELDA:THE MINISH CAP:ZELDA 5"). */
+  SIGNATURE_USA,
+
+  /** ROM signature for JPN builds ("AGBZELDA:THE MINISH CAP:ZELDA 3"). */
+  SIGNATURE_JP,
 } from "./constants.js";
