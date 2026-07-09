@@ -126,7 +126,9 @@ export const NUM_SAVE_SLOTS = 3;
 // ---------------------------------------------------------------------------
 
 export const SIGNATURE_USA = "AGBZELDA:THE MINISH CAP:ZELDA 5";
+/** JP and EU share the same signature string (both use "ZELDA 3"). */
 export const SIGNATURE_JP  = "AGBZELDA:THE MINISH CAP:ZELDA 3";
+export const SIGNATURE_EU  = SIGNATURE_JP;
 
 // ---------------------------------------------------------------------------
 // SaveFile struct field offsets (from include/save.h)

@@ -861,8 +861,8 @@ export interface DecodedSave {
    * ROM region signature string stored in EEPROM region 4.
    *
    * Known values:
-   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 5"` — USA / EUR
-   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 3"` — JPN
+   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 5"` — USA
+   *   - `"AGBZELDA:THE MINISH CAP:ZELDA 3"` — JPN / EUR
    *
    * Preserved verbatim on round-trip so regional saves remain valid.
    * `encodeSave()` falls back to the USA string when this is null.
