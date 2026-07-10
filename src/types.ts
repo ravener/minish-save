@@ -307,6 +307,7 @@ export interface PlayerStats {
 
   /**
    * Bomb bag upgrade level.
+   * 
    * - 0 = 10 max
    * - 1 = 30 max
    * - 2 = 50 max
@@ -316,7 +317,11 @@ export interface PlayerStats {
 
   /**
    * Quiver upgrade level.
-   * 0 = 30 max, 1 = 50 max, 2 = 99 max
+   * 
+   * - 0 = 30 max
+   * - 1 = 50 max
+   * - 2 = 70 max
+   * - 3 = 99 max
    */
   quiverType: number;
 
