@@ -307,7 +307,10 @@ export interface PlayerStats {
 
   /**
    * Bomb bag upgrade level.
-   * 0 = 30 max, 1 = 50 max, 2 = 99 max
+   * - 0 = 10 max
+   * - 1 = 30 max
+   * - 2 = 50 max
+   * - 3 = 99 max
    */
   bombBagType: number;
 
