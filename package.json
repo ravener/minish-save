@@ -1,6 +1,6 @@
 {
   "name": "minish-save",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Read and write save files for The Legend of Zelda: The Minish Cap (GBA)",
   "type": "module",
   "main": "./dist/index.js",
