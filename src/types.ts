@@ -279,7 +279,11 @@ export enum KinstoneId {
 export interface PlayerStats {
   /**
    * Wallet upgrade level.
-   * 0 = Small (max 300 rupees), 1 = Medium (max 600), 2 = Large (max 1000)
+   * 
+   * - 0 = Default (max 100 rupees)
+   * - 1 = First Upgrade (max 300)
+   * - 2 = Second Upgrade (max 500)
+   * - 3 = Third Upgrade (max 999)
    */
   walletType: number;
 
@@ -667,7 +671,7 @@ export interface GameFlags {
 export interface SaveSlot {
   /** Player name, up to 6 characters. */
   name: string;
-  
+
   /**
    * Whether the slot's `initialized` byte is non-zero.
    *
