@@ -293,10 +293,10 @@ export interface PlayerStats {
    */
   heartPieces: number;
 
-  /** Current health in quarter-hearts (e.g. 12 = 3 full hearts). */
+  /** Current health. One full heart equals 8 health units (e.g. 24 = 3 hearts). */
   health: number;
 
-  /** Maximum health in quarter-hearts. */
+  /** Maximum health. One full heart equals 8 health units. */
   maxHealth: number;
 
   /** Current bomb count. */
