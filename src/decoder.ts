@@ -338,9 +338,11 @@ function decodeAreaVisited(buf: Uint8Array, base: number): boolean[] {
  * Returns null if the `initialized` byte is 0 (slot was never written).
  */
 function decodeSaveFile(buf: Uint8Array, base: number): SaveSlot | null {
-  // Guard: the game sets initialized=1 when writing a save for the first time
-  if (buf[base + SF.initialized] === 0) return null;
-
+  // Note: we intentionally do NOT gate on SF.initialized here.
+  // An uninitialized slot (initialized === 0) occurs when a new game has been
+  // created but not yet played — the name and default stats are present and
+  // all other fields are correctly zero-initialized by the game.  Callers can
+  // inspect SaveSlot.initialized to distinguish this case.
   const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
 
   const windcrestsRaw = view.getUint32(base + SF.windcrests, true);
@@ -350,6 +352,7 @@ function decodeSaveFile(buf: Uint8Array, base: number): SaveSlot | null {
 
   return {
     name:               decodeName(buf, base + SF.name, 6),
+    initialized:        buf[base + SF.initialized] !== 0,
     msgSpeed:           buf[base + SF.msg_speed],
     brightness:         buf[base + SF.brightness],
     sawStaffroll:       buf[base + SF.saw_staffroll] !== 0,

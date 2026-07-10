@@ -667,6 +667,15 @@ export interface GameFlags {
 export interface SaveSlot {
   /** Player name, up to 6 characters. */
   name: string;
+  
+  /**
+   * Whether the slot's `initialized` byte is non-zero.
+   *
+   * `false` when a new game has been created but not yet played: the player
+   * name and default stats are present but most other fields are zero.
+   * `decodeSave()` returns the slot regardless of this value.
+   */
+  initialized: boolean;
 
   /**
    * Message scroll speed.

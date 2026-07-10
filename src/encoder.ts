@@ -311,7 +311,7 @@ function encodeSaveFile(slot: SaveSlot): Uint8Array {
   const view = new DataView(buf.buffer);
 
   buf[SF.invalid]             = 0; // valid
-  buf[SF.initialized]         = 1;
+  buf[SF.initialized]         = slot.initialized ? 1 : 0;
   buf[SF.msg_speed]           = slot.msgSpeed;
   buf[SF.brightness]          = slot.brightness;
   buf[SF.saw_staffroll]       = slot.sawStaffroll ? 1 : 0;
@@ -521,23 +521,24 @@ export function writeFlag(
 }
 
 /**
- * Create a blank SaveSlot pre-filled with sensible defaults for a new game.
+ * Create a blank uninitialized SaveSlot pre-filled with sensible defaults for a new game.
  * Useful when constructing a save from scratch.
  */
 export function createBlankSlot(name = "LINK"): SaveSlot {
   return {
     name,
+    initialized: false,
     msgSpeed:    1,
     brightness:  1,
     sawStaffroll: false,
     dwsBarrelState: 0,
-    globalProgress: 1,
+    globalProgress: 0,
     availableFigurines: 0,
     stats: {
       walletType:      0,
       heartPieces:     0,
-      health:          12,
-      maxHealth:       12,
+      health:          24,
+      maxHealth:       24,
       bombCount:       0,
       arrowCount:      0,
       bombBagType:     0,
@@ -560,7 +561,7 @@ export function createBlankSlot(name = "LINK"): SaveSlot {
       effectTimer:     0,
     },
     position: {
-      area:            0x15, // AREA_FESTIVAL_TOWN (starting area for demo; 0x03 for normal)
+      area:            0,
       room:            0,
       spawnAnimation:  0,
       spawnType:       0,
