@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { decodeSave } from '../dist/index.js';
+import { decodeSave } from '../src/index';
 
 it('must throw on wrong save file size', () => {
     expect(() => decodeSave(new Uint8Array(0))).toThrow(RangeError);
