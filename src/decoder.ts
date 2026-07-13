@@ -405,18 +405,27 @@ function decodeSaveHeader(buf: Uint8Array, base: number): SaveHeader | null {
 // ---------------------------------------------------------------------------
 
 /**
- * Read the ROM signature string from EEPROM region 4 (address2 = 0x1000).
- * Returns null when the region is blank (all zeros or empty).
+ * Read the ROM signature string from EEPROM region 4.
+ * Reads from address1 (primary) first; falls back to address2 (backup) if primary is empty.
+ * Returns null when both copies are blank (all zeros).
  */
 function decodeSignature(buf: Uint8Array): string | null {
   const region = EEPROM_REGIONS[REGION_SIG];
-  let sig = "";
-  for (let i = 0; i < region.size; i++) {
-    const code = buf[region.address2 + i];
-    if (code === 0) break;
-    sig += String.fromCharCode(code);
+
+  function readFrom(base: number): string {
+    let s = "";
+    for (let i = 0; i < region.size; i++) {
+      const code = buf[base + i];
+      if (code === 0) break;
+      s += String.fromCharCode(code);
+    }
+    return s;
   }
-  return sig.length > 0 ? sig : null;
+
+  const primary = readFrom(region.address1);
+  if (primary.length > 0) return primary;
+  const backup = readFrom(region.address2);
+  return backup.length > 0 ? backup : null;
 }
 
 // ---------------------------------------------------------------------------

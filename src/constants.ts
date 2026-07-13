@@ -100,7 +100,7 @@ export const EEPROM_REGIONS: readonly EEPROMRegion[] = [
   { size: 0x0500, checksum1: 0x0050, checksum2: 0x1050, address1: 0x0A80, address2: 0x1A80 },
   // 3: Save header
   { size: 0x0010, checksum1: 0x0020, checksum2: 0x1020, address1: 0x0070, address2: 0x1070 },
-  // 4: Signature (address2 is the only real copy; address1/checksum1/checksum2 unused)
+  // 4: Signature — address1=0x0000 is primary, address2=0x1000 is backup; checksum fields unused
   { size: 0x0020, checksum1: 0x0000, checksum2: 0x0000, address1: 0x0000, address2: 0x1000 },
   // 5: Extra region A
   { size: 0x0020, checksum1: 0x0060, checksum2: 0x1060, address1: 0x0F80, address2: 0x1F80 },
