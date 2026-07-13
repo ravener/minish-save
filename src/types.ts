@@ -885,10 +885,29 @@ export interface DecodedSave {
    *   - `"AGBZELDA:THE MINISH CAP:ZELDA 5"` — USA
    *   - `"AGBZELDA:THE MINISH CAP:ZELDA 3"` — JPN / EUR
    *
+   * `decodeSave()` throws if this is null or does not match a known value.
    * Preserved verbatim on round-trip so regional saves remain valid.
-   * `encodeSave()` falls back to the USA string when this is null.
    */
-  signature: string | null;
+  signature: string;
+}
+
+/**
+ * Input accepted by `encodeSave()`.
+ *
+ * Only `slots` is required.  Omitted fields use safe defaults:
+ *   - `header`    — derived automatically from the provided slots.
+ *   - `signature` — `SIGNATURE_USA` (`"AGBZELDA:THE MINISH CAP:ZELDA 5"`).
+ *
+ * A `DecodedSave` (as returned by `decodeSave()`) satisfies this type and can
+ * be passed directly for a clean round-trip.
+ */
+export interface SaveInput {
+  /** The three save slots.  Pass `null` for empty/unused slots. */
+  slots: [SaveSlot | null, SaveSlot | null, SaveSlot | null];
+  /** Override the auto-derived save header. */
+  header?: SaveHeader | null;
+  /** ROM region signature.  Defaults to `SIGNATURE_USA`. */
+  signature?: string;
 }
 
 // ---------------------------------------------------------------------------

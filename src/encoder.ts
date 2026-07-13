@@ -33,12 +33,12 @@ import {
   FLAG_BANK_1_OFFSET,
   FLAG_VAATI_POSSESSED_DALTUS,
   FLAG_BIGGORON_SHIELD,
-  FLAG_BIGGORON_EXCHG,
-  DUNGEON_ITEM_MAP,
-  DUNGEON_ITEM_BIG_KEY,
-  DUNGEON_ITEM_COMPASS,
-  INVENTORY_SLOTS,
-  SIGNATURE_USA,
+   FLAG_BIGGORON_EXCHG,
+   DUNGEON_ITEM_MAP,
+   DUNGEON_ITEM_BIG_KEY,
+   DUNGEON_ITEM_COMPASS,
+   INVENTORY_SLOTS,
+   SIGNATURE_USA,
 } from "./constants.js";
 
 import {
@@ -48,9 +48,10 @@ import {
 } from "./checksum.js";
 
 import {
-  type SaveSlot,
+   type SaveSlot,
   type SaveHeader,
   type DecodedSave,
+  type SaveInput,
   type SaveOptions,
   type PlayerStats,
   type PlayerPosition,
@@ -411,30 +412,38 @@ function writeSignature(eeprom: Uint8Array, signature: string): void {
 // ---------------------------------------------------------------------------
 
 /**
- * Encode a DecodedSave back into an 8 KB EEPROM file.
+ * Encode a save back into an 8 KB EEPROM file.
+ *
+ * Only `slots` is required.  Everything else has a safe default:
+ *   - `header`    — derived automatically from the slots.
+ *   - `signature` — `SIGNATURE_USA` (`"AGBZELDA:THE MINISH CAP:ZELDA 5"`).
  *
  * - Non-null slots are fully serialised and written to both the primary and
  *   backup EEPROM locations with matching checksums.
  * - Null slots are stamped with a TINI (factory-fresh) status so the game
  *   treats them as empty rather than corrupt.
- * - The ROM signature is written to region 4.  The value from `save.signature`
- *   is used verbatim when present; otherwise `SIGNATURE_USA` is used as a
- *   fallback.  This keeps JPN saves (ZELDA 3) compatible on round-trip.
- * - If `save.header` is null a header is automatically derived from the slots.
+ * - The ROM signature is written to region 4 verbatim from `save.signature`.
+ *   This keeps JPN/EUR saves (ZELDA 3) compatible on round-trip.
+ * - If `save.header` is null/omitted a header is automatically derived from the slots.
  *
- * @param save    The DecodedSave returned by `decodeSave()` (possibly modified).
+ * @param save    Slots (required) plus optional header and signature.
+ *                A `DecodedSave` returned by `decodeSave()` is accepted as-is.
  * @param options Optional settings (e.g. byteSwapped for VBA-M saves).
  * @returns       A new 8192-byte Uint8Array ready to write to disk.
  *
  * @example
  * ```ts
+ * // Minimal — just slots:
+ * const raw = encodeSave({ slots: [createBlankSlot(), null, null] });
+ *
+ * // Round-trip with modifications:
  * const save = decodeSave(raw);
  * save.slots[0]!.stats.rupees = 999;
  * const newRaw = encodeSave(save);
  * ```
  */
 export function encodeSave(
-  save: DecodedSave,
+  save: SaveInput,
   options: SaveOptions = {},
 ): Uint8Array {
   const eeprom = new Uint8Array(EEPROM_SIZE); // start zeroed
@@ -461,7 +470,7 @@ export function encodeSave(
   }
 
   // ── Save header ───────────────────────────────────────────────────────────
-  const headerData = deriveHeader(save.slots, save.header);
+  const headerData = deriveHeader(save.slots, save.header ?? null);
   const headerPayload = encodeHeader(headerData);
   dataDoubleWriteWithStatus(view, EEPROM_REGIONS[REGION_HEADER], headerPayload);
 

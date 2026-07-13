@@ -69,6 +69,7 @@ export { byteSwapEEPROM } from "./checksum.js";
 export type {
   // Top-level
   DecodedSave,
+  SaveInput,
   SaveSlot,
   SaveHeader,
   SaveOptions,

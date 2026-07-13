@@ -34,6 +34,8 @@ import {
   DUNGEON_ITEM_COMPASS,
   INVENTORY_SLOTS,
   EEPROM_SIZE,
+  SIGNATURE_USA,
+  SIGNATURE_JP,
 } from "./constants.js";
 
 import {
@@ -476,6 +478,13 @@ export function decodeSave(
     return decodeSaveHeader(buf, result.dataOffset);
   }
 
+  const signature = decodeSignature(buf);
+  if (signature !== SIGNATURE_USA && signature !== SIGNATURE_JP) {
+    throw new Error(
+      `Invalid or unrecognized EEPROM signature: ${signature === null ? "(none)" : JSON.stringify(signature)}`
+    );
+  }
+
   return {
     slots: [
       readSlot(REGION_SAVE_0),
@@ -483,7 +492,7 @@ export function decodeSave(
       readSlot(REGION_SAVE_2),
     ],
     header: readHeader(),
-    signature: decodeSignature(buf),
+    signature,
   };
 }
 
