@@ -136,4 +136,10 @@ export {
 
   /** ROM signature for EUR builds — same value as SIGNATURE_JP ("AGBZELDA:THE MINISH CAP:ZELDA 3"). */
   SIGNATURE_EU,
+
+  /**
+   * Validity signature stored in SaveHeader.signature ('MCZ3' as a LE u32).
+   * CheckHeaderValid() rejects any header whose signature field does not equal this value.
+   */
+  HEADER_SIGNATURE,
 } from "./constants.js";

@@ -40,6 +40,13 @@ export const STATUS_TINI = 0x54494E49;
 /** Explicitly deleted slot. */
 export const STATUS_FLED = 0x466C6544;
 
+/**
+ * Validity signature stored in SaveHeader.signature.
+ * Equals the GBA 4-char constant 'MCZ3' read as a little-endian u32.
+ * Used by CheckHeaderValid() to detect a corrupt or missing header.
+ */
+export const HEADER_SIGNATURE = STATUS_MCZ3; // 'MCZ3'
+
 // ---------------------------------------------------------------------------
 // SaveFileStatus struct field offsets (relative to the status block start)
 // ---------------------------------------------------------------------------

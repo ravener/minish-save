@@ -39,6 +39,7 @@ import {
    DUNGEON_ITEM_COMPASS,
    INVENTORY_SLOTS,
    SIGNATURE_USA,
+   HEADER_SIGNATURE,
 } from "./constants.js";
 
 import {
@@ -380,17 +381,25 @@ function deriveHeader(
 ): SaveHeader {
   if (existingHeader) return existingHeader;
 
+  // Mirror sDefaultSettings from src/main.c:
+  //   .signature   = 'MCZ3'
+  //   .saveFileId  = 0  (or first populated slot)
+  //   .msg_speed   = 1
+  //   .brightness  = 1
+  //   .language    = LANGUAGE_EN (1) for USA/JPN builds
+  //   .name        = "LINK"  (always hardcoded — see analysis)
+  //   .invalid     = 0
+  //   .initialized = 0
   const activeId = slots.findIndex(s => s !== null);
-  const active   = slots[activeId] ?? null;
 
   return {
-    signature:   0,
+    signature:   HEADER_SIGNATURE,
     saveFileId:  activeId >= 0 ? activeId : 0,
-    msgSpeed:    active?.msgSpeed    ?? 1,
-    brightness:  active?.brightness  ?? 1,
-    language:    1, // English
-    name:        active?.name        ?? "",
-    initialized: true,
+    msgSpeed:    1,
+    brightness:  1,
+    language:    1, // LANGUAGE_EN; EU builds use 2 but we default to English
+    name:        "LINK",
+    initialized: false,
   };
 }
 
