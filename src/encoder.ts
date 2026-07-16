@@ -383,18 +383,16 @@ function deriveHeader(
 
   // Mirror sDefaultSettings from src/main.c:
   //   .signature   = 'MCZ3'
-  //   .saveFileId  = 0  (or first populated slot)
+  //   .saveFileId  = 0
   //   .msg_speed   = 1
   //   .brightness  = 1
   //   .language    = LANGUAGE_EN (1) for USA/JPN builds
   //   .name        = "LINK"  (always hardcoded — see analysis)
   //   .invalid     = 0
   //   .initialized = 0
-  const activeId = slots.findIndex(s => s !== null);
-
   return {
     signature:   HEADER_SIGNATURE,
-    saveFileId:  activeId >= 0 ? activeId : 0,
+    saveFileId:  0,
     msgSpeed:    1,
     brightness:  1,
     language:    1, // LANGUAGE_EN; EU builds use 2 but we default to English
