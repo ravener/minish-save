@@ -358,7 +358,7 @@ export interface PlayerStats {
   /** Current rupee count. */
   rupees: number;
 
-  /** Current mysterious shell count. */
+  /** Current mysterious shell count. (max 999) */
   shells: number;
 
   /** Frames remaining on the active goddess charm. */
